@@ -47,6 +47,9 @@ FairEveGeoTracks::FairEveGeoTracks()
 
 InitStatus FairEveGeoTracks::Init()
 {
+    auto status = FairEveTracks::Init();
+    if (status != kSUCCESS)
+        return status;
     FairEventManager* eveManager = GetEventManager();
     auto& mngr = eveManager->GetRootManager();
     fContainer = dynamic_cast<TClonesArray*>(mngr.GetObject("GeoTracks"));
@@ -56,7 +59,7 @@ InitStatus FairEveGeoTracks::Init()
     }
     fBranch = mngr.GetInTree()->GetBranch("GeoTracks");
     FairGetEventTime::Instance().Init();
-    return FairEveTracks::Init();
+    return kSUCCESS;
 }
 
 void FairEveGeoTracks::DrawTrack(Int_t id)
