@@ -194,8 +194,11 @@ void FairEveRecoTracksExample::Repaint()
 
 InitStatus FairEveRecoTracksExample::Init()
 {
-    FairRootManager *mngr = FairRootManager::Instance();
-    fContainerReco = (TClonesArray *)mngr->GetObject("FairTutPropTracks");
+    auto status = FairEveTracks::Init();
+    if (status != kSUCCESS)
+        return status;
+    FairRootManager* mngr = GetEventManager();
+    fContainerReco = (TClonesArray*)mngr->GetObject("FairTutPropTracks");
     if (fContainerReco == nullptr) {
         LOG(error) << "Reco traks not found";
         return kFATAL;
@@ -218,7 +221,7 @@ InitStatus FairEveRecoTracksExample::Init()
     }
     fRK = new FairRKPropagator(field);
     fPDG = TDatabasePDG::Instance();
-    return FairEveTracks::Init();
+    return kSUCCESS;
 }
 
 void FairEveRecoTracksExample::SetDrawMC(Bool_t draw)
